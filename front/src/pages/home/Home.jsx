@@ -1,6 +1,7 @@
 import Header from "../../components/header/Header"
 import Banner from "../../components/banner/Banner"
 import Feature from "../../components/feature/Feature"
+import Footer from "../../components/footer/Footer"
 import chat from "../../assets/img/icon-chat.webp"
 import money from "../../assets/img/icon-money.webp"
 import security from "../../assets/img/icon-security.webp"
@@ -32,7 +33,7 @@ function Home() {
                     text="We use top of the line encryption to make sure your data and money is always safe"
                 />
             </section>
-            
+            <Footer />
         </div>   
     )
 }
