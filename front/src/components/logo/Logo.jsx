@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import logo from "../../../../designs/img/argentBankLogo.png"
+import logo from "../../assets/img/argentBankLogo.webp"
 import "../../main.scss"
 
 function Logo() {
