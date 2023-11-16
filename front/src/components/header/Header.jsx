@@ -1,13 +1,15 @@
 import Logo from "../logo/Logo"
-import Login from "../login/Login"
+import SignInLink from "../signInLink/SignInLink"
 import "../../main.scss"
 
 function Header() {
     return (
-        <nav className="main-nav">
-            <Logo />
-            <Login />
-        </nav>
+        <header>
+            <nav className="main-nav">
+                <Logo />
+                <SignInLink />
+            </nav>
+        </header>
     )
 }
 
