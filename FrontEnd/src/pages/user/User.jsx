@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux" 
+import { addUserData } from "../../redux/userSlice"
 import UserAccount from "../../components/userAccount/UserAccount"
 import UserHeader from "../../components/userHeader/UserHeader"
 import "./user.scss"
 
-function User({onUserData}) {
-    const token= localStorage.getItem("token");
-    const [userData, setUserData] = useState({})
+
+function User() {
+    const token = useSelector((state) => state.authUser.token)
+    const userData = useSelector((state) => state.user)
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const fetchUserData = async() => {
@@ -19,9 +23,7 @@ function User({onUserData}) {
 
                 const userDataResponse = await response.json();
                 const userDataResponseBody= userDataResponse.body
-                setUserData(userDataResponseBody)
-                onUserData(userDataResponseBody)
-                localStorage.setItem("user",userDataResponse);
+                dispatch(addUserData(userDataResponseBody))
 
             } catch (error) {
                 console.error("Erreur lors de la récupération des données utilisateur :", error.message);

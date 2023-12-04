@@ -1,12 +1,12 @@
 import SignInForm from "../../components/signInForm/SignInForm"
 import "./signIn.scss"
 
-function SignIn({ onLogin }) {
+function SignIn() {
     
     return (
         <>
             <main className="main bg-dark">
-                <SignInForm onLogin={onLogin}/>
+                <SignInForm />
             </main>
         </>
     )

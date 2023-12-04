@@ -1,15 +1,19 @@
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux" 
+import { editUserName } from "../../redux/userSlice"
 import "./userHeader.scss"
 
-function UserHeader({firstName, lastName }) {
+function UserHeader() {
     const [isOpen, setIsOpen] = useState(false)
     const [newUserName, setNewUserName] = useState()
-    let text=""
+    const [text, setText] = useState()
+    const userData = useSelector((state) => state.user)
+    const token = useSelector((state) => state.authUser.token)
+    const dispatch = useDispatch()
 
     async function changeUserName(event, newUserName) {
         event.preventDefault();
         
-        const token= localStorage.getItem("token");
         const newUserNameJson = JSON.stringify({userName: newUserName});
 
         try {
@@ -23,13 +27,13 @@ function UserHeader({firstName, lastName }) {
             })
 
             if(response){
-                return text="Changement effectué"
+                dispatch(editUserName(newUserName))
+                setText("Username Updated !")
             } else throw new Error("Erreur lors de la requête")
         }
         catch (error) {
             console.error("Erreur lors de la récupération des données utilisateur :", error.message);
         }
-
     }
 
     function formEditName() {
@@ -53,7 +57,7 @@ function UserHeader({firstName, lastName }) {
                             className="edit-readOnly"
                             type="text" 
                             id="firstname" 
-                            value={firstName}
+                            value={userData.firstName}
                             readOnly={true}
                         />
                     </div>
@@ -63,7 +67,7 @@ function UserHeader({firstName, lastName }) {
                             className="edit-readOnly"
                             type="text" 
                             id="lastname" 
-                            value={lastName}
+                            value={userData.lastName}
                             readOnly={true}
                         />
                     </div>
@@ -76,7 +80,11 @@ function UserHeader({firstName, lastName }) {
                     </button>
                     <button 
                         className="edit-button" 
-                        onClick={() => setIsOpen(!isOpen)} 
+                        onClick={() => {
+                            setIsOpen(!isOpen)
+                            setText("")
+                            } 
+                        } 
                         >
                             Cancel
                     </button>
@@ -89,7 +97,7 @@ function UserHeader({firstName, lastName }) {
     return (
         <div className="header">
             <h1>
-                Welcome back <br /> {firstName} {lastName}!
+                Welcome back <br /> {userData.firstName} {userData.lastName}!
             </h1>
             <button 
                 className="edit-button" 

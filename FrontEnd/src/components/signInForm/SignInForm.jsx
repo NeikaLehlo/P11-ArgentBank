@@ -1,21 +1,23 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { login } from "../../redux/authUserSlice"
 import "./signInForm.scss"
 
-function SignInForm({onLogin}){
+function SignInForm(){
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [rememberMe, setRememberMe] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     async function connection(event, email, password){
         event.preventDefault()
         try{
-            const login = {
+            const loginFetch = {
                 "email": email,
                 "password": password
             };
-            const loginJson= JSON.stringify(login);
+            const loginJson= JSON.stringify(loginFetch);
 
             const response = await fetch("http://localhost:3001/api/v1/user/login", {
                 method: "POST",
@@ -25,16 +27,13 @@ function SignInForm({onLogin}){
 
             const loginResponse = await response.json();
             const token = loginResponse.body.token
-            onLogin(token)
+            dispatch(login({token}))
+            navigate("/user")
 
             if(!token) {
                 throw new Error("Email et/ou Mot de Passe incorrect");
-            } else {
-                localStorage.setItem("token",token)
-                console.log("Connexion réussie !!")
-                navigate("/user")
-                
-            }
+            } 
+
         } catch (error) {
             console.error("Erreur lors de la connexion :", error.message);
         }
@@ -67,8 +66,6 @@ function SignInForm({onLogin}){
                     <input 
                         type="checkbox" 
                         id="remember-me" 
-                        checked={rememberMe}
-                        onChange={() => setRememberMe(!rememberMe)}
                     />
                     <label htmlFor="remember-me">Remember me</label>
                 </div>

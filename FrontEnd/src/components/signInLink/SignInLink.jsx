@@ -1,17 +1,32 @@
 import { Link } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import { logout } from "../../redux/authUserSlice"
+import { deleteUserData } from "../../redux/userSlice"
 import "./signInLink.scss"
 
-function SignInLink({login, logout, userData}) {
-  
+
+function SignInLink() {
+    const token = useSelector((state) => state.authUser.token)
+    const userData = useSelector((state) => state.user)
+    const dispatch = useDispatch()
+
     return (
         <div>
-            {login ? (
+            {token ? (
                 <>
                     <Link className="main-nav-item" to={`/user`}>
                         <i className="fa fa-user-circle"></i>
-                        <span> {userData.firstName}</span>
+                        <span> {userData.userName}</span>
                     </Link>
-                    <Link className="main-nav-item" to={`/`} onClick={logout}>
+                    <Link 
+                        className="main-nav-item" 
+                        to={`/`} 
+                        onClick={() => {
+                            dispatch(logout())
+                            dispatch(deleteUserData())
+                            }
+                        }
+                    >
                             <i className="fa fa-sign-out"></i>
                             <span> Sign Out</span>
                     </Link>
