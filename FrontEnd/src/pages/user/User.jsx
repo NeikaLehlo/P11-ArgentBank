@@ -1,19 +1,45 @@
-import Header from "../../components/header/Header"
-import Footer from "../../components/footer/Footer"
+import { useState, useEffect } from "react"
 import UserAccount from "../../components/userAccount/UserAccount"
 import UserHeader from "../../components/userHeader/UserHeader"
 import "./user.scss"
 
+function User({onUserData}) {
+    const token= localStorage.getItem("token");
+    const [userData, setUserData] = useState({})
 
-function User() {
+    useEffect(() => {
+        const fetchUserData = async() => {
+            try{
+                const response = await fetch("http://localhost:3001/api/v1/user/profile", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+
+                const userDataResponse = await response.json();
+                const userDataResponseBody= userDataResponse.body
+                setUserData(userDataResponseBody)
+                onUserData(userDataResponseBody)
+                localStorage.setItem("user",userDataResponse);
+
+            } catch (error) {
+                console.error("Erreur lors de la récupération des données utilisateur :", error.message);
+            }
+        }
+        fetchUserData();
+    },[token])
+
     return (
         <>
-            <Header />
             <main className="main bg-dark">
+                { userData &&(
                 <UserHeader
-                    firstname="Chloé"
-                    lastname="Neika"
+                    userName={userData.userName}
+                    firstName={userData.firstName}
+                    lastName={userData.lastName}
                 />
+                ) }
                 <h2 className="sr-only">Accounts</h2>
                 <UserAccount 
                     title="Argent Bank Checking (x8349)"
@@ -31,7 +57,6 @@ function User() {
                     description="Current Balance"
                 />
             </main>
-            <Footer />
         </>
     )
 }

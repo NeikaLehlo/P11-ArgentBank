@@ -2,12 +2,13 @@ import Logo from "../logo/Logo"
 import SignInLink from "../signInLink/SignInLink"
 import "./header.scss"
 
-function Header() {
+function Header({login, logout, userData}) {
+    
     return (
         <header>
             <nav className="main-nav">
                 <Logo />
-                <SignInLink />
+                <SignInLink login={login} logout={logout} userData={userData}/>
             </nav>
         </header>
     )
