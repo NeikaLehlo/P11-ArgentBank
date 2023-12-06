@@ -7,8 +7,10 @@ import "./signInForm.scss"
 function SignInForm(){
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [text, setText] = useState("")
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    
 
     async function connection(event, email, password){
         event.preventDefault()
@@ -25,17 +27,23 @@ function SignInForm(){
                 body : loginJson
             });
 
+            if(!response.ok) {
+                const errorResponse = await response.json()
+                console.error("Erreur lors de la requête1:", errorResponse.message);
+                setText("Email et/ou Mot de Passe incorrect")
+                return;
+            } 
+
             const loginResponse = await response.json();
             const token = loginResponse.body.token
             dispatch(login({token}))
             navigate("/user")
 
-            if(!token) {
-                throw new Error("Email et/ou Mot de Passe incorrect");
-            } 
+            
 
-        } catch (error) {
-            console.error("Erreur lors de la connexion :", error.message);
+        } catch (err) {
+            console.error("Erreur lors de la requête:", err.message);
+            setText("Erreur lors de la connexion : Veuillez contacter l'administrateur du serveur")
         }
     }
 
@@ -62,6 +70,7 @@ function SignInForm(){
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                <p className="sign-in-error-text">{text}</p>
                 <div className="input-remember">
                     <input 
                         type="checkbox" 

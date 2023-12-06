@@ -11,16 +11,11 @@ export const authUserSlice = createSlice({
             //{type: "authUSer/login", payload: token}
             
             state.token = action.payload.token;
-            // return state;
         },
 
         logout: (state) => {
             //{type: "authUser/logout"}
-            state = {
-                token: "",
-                // user: {}
-            }
-            return state;
+            state.token = ""
         },
     },
 });

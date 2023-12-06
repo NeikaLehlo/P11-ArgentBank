@@ -25,7 +25,6 @@ export const userSlice = createSlice({
 
         deleteUserData: (state) => {
             //{type: "userSlice/editUserData"}
-            // return initialState;
             state.email = "";
             state.firstName = "";
             state.lastName = "";
