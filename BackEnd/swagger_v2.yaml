@@ -108,7 +108,34 @@ paths:
       tags:
         - Transaction Module
       summary: User Transactions API
-      description: API for fetching a user transactions
+      description: API for fetching all user transactions
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User transactions retrieved successully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/transactions/{month}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: User Transactions API
+      description: API for fetching user transactions by month
+      parameters:
+        - in: path
+          name: month
+          required: true
+          description: month name
+          type: string
       produces:
         - application/json
       responses:
@@ -255,9 +282,6 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-          
-          
-          
           
 securityDefinitions:
   Bearer:
